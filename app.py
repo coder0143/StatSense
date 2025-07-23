@@ -71,80 +71,81 @@ def main():
 
     with st.sidebar:
         st.header("AI analysis")
-        with st.expander("Model performance analysis"):
-            response = ollama.chat(
-                model="llama3.2",
-                messages=[{
-                    "role": "user", 
-                    "content": f"""
-                    You are an expert on analyzing ml models, 
-                    Generate an in detail performance analysis based on the info I give you:
-                    The model is a {exp["model_type"]} model with given params and results: 
-                    {df_sorted.to_string()},
-                    Model data:
-                    {exp["model_data"]}
-                    """
-                }], stream=True
-            )
-            res_content = ""
-            def catch_response(response):
-                global response_content
-                for chunck in response:
-                    response_content = chunck["message"]["content"]
-                    yield chunck["message"]["content"]
+        if st.button("Generate analysis"):
+            with st.expander("Model performance analysis"):
+                response = ollama.chat(
+                    model="phi3:mini",
+                    messages=[{
+                        "role": "user", 
+                        "content": f"""
+                        You are an expert on analyzing ml models, 
+                        Generate an in detail performance analysis of different models based on the info I give you:
+                        The model is a {exp["model_type"]} model with given params and results: 
+                        {df_sorted.to_string()},
+                        Model data:
+                        {exp["model_data"]}
+                        """
+                    }], stream=True
+                )
+                res_content = ""
+                def catch_response(response):
+                    global response_content
+                    for chunck in response:
+                        response_content = chunck["message"]["content"]
+                        yield chunck["message"]["content"]
+                
+                stream = catch_response(response)
+                st.write_stream(stream)
             
-            stream = catch_response(response)
-            st.write_stream(stream)
-        
-        with st.expander("Architechture recommendation"):
-            response = ollama.chat(
-                model="llama3.2",
-                messages=[{
-                    "role": "user", 
-                    "content": f"""
-                    You are an expert on analyzing ml models, 
-                    Generate an in detail architechture recommendation based on the info I give you:
-                    The model is a {exp["model_type"]} model with given params and results: 
-                    {df_sorted.to_string()},
-                    Model data:
-                    {exp["model_data"]}
-                    """
-                }], stream=True
-            )
-            res_content = ""
-            def catch_response(response):
-                global response_content
-                for chunck in response:
-                    response_content = chunck["message"]["content"]
-                    yield chunck["message"]["content"]
-            
-            stream = catch_response(response)
-            st.write_stream(stream)
+            with st.expander("Architechture recommendation"):
+                response = ollama.chat(
+                    model="phi3:mini",
+                    messages=[{
+                        "role": "user", 
+                        "content": f"""
+                        You are an expert on analyzing ml models, 
+                        Generate an in detail architechture recommendation, or suggest some powerful existing architechtures based on the info I give you:
+                        The model is a {exp["model_type"]} model with given params and results: 
+                        {df_sorted.to_string()},
+                        Model data:
+                        {exp["model_data"]}
+                        """
+                    }], stream=True
+                )
+                res_content = ""
+                def catch_response(response):
+                    global response_content
+                    for chunck in response:
+                        response_content = chunck["message"]["content"]
+                        yield chunck["message"]["content"]
+                
+                stream = catch_response(response)
+                st.write_stream(stream)
 
-        with st.expander("Training optimization"):
-            response = ollama.chat(
-                model="llama3.2",
-                messages=[{
-                    "role": "user", 
-                    "content": f"""
-                    You are an expert on analyzing ml models, 
-                    Generate an in detail training optimization recommendations based on the info I give you:
-                    The model is a {exp["model_type"]} model with given params and results: 
-                    {df_sorted.to_string()},
-                    Model data:
-                    {exp["model_data"]}
-                    """
-                }], stream=True
-            )
-            res_content = ""
-            def catch_response(response):
-                global response_content
-                for chunck in response:
-                    response_content = chunck["message"]["content"]
-                    yield chunck["message"]["content"]
-            
-            stream = catch_response(response)
-            st.write_stream(stream)
+            with st.expander("Training optimization"):
+                response = ollama.chat(
+                    model="phi3:mini",
+                    messages=[{
+                        "role": "user", 
+                        "content": f"""
+                        You are an expert on analyzing ml models, 
+                        Generate an in detail training optimization recommendations based on the info I give you:
+                        The model is a {exp["model_type"]} model with given params and results: 
+                        {df_sorted.to_string()},
+                        Model data:
+                        {exp["model_data"]}
+                        """
+                    }], stream=True
+                )
+                res_content = ""
+                def catch_response(response):
+                    global response_content
+                    for chunck in response:
+                        response_content = chunck["message"]["content"]
+                        yield chunck["message"]["content"]
+                
+                stream = catch_response(response)
+                st.write_stream(stream)
 
 if __name__ == '__main__':
     main()
